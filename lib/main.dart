@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:minitaskmanagementapps/presentation/bloc/theme/theme_bloc.dart';
 import 'data/datasources/task_local_datasource.dart';
 import 'data/repositories/task_repository_impl.dart';
 import 'domain/repositories/task_repository.dart';
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Task Manager',
       home: BlocProvider(
         create: (_) => TaskBloc(repository)..add(LoadTasks()),
