@@ -5,6 +5,7 @@ import 'package:minitaskmanagementapps/core/utils/color.dart';
 import 'package:minitaskmanagementapps/core/utils/custome_pop_up_item.dart';
 import 'package:minitaskmanagementapps/core/utils/custome_text_form_field.dart';
 import 'package:minitaskmanagementapps/presentation/bloc/task/task_bloc.dart';
+import 'package:minitaskmanagementapps/presentation/bloc/theme/theme_bloc.dart';
 import '../../domain/entities/task.dart';
 
 class TaskPage extends StatefulWidget {
@@ -21,11 +22,18 @@ class _TaskPageState extends State<TaskPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = context.select((ThemeBloc bloc) => bloc.state.isDarkMode);
     return Scaffold(
       appBar: AppBar(
         // backgroundColor: Colors.green,
         title: const Text('Mini Task Management App'),
         actions: [
+          Switch(
+            value: isDark,
+            onChanged: (_) {
+              context.read<ThemeBloc>().add(ToggleThemeEvent());
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.more_vert),
             onPressed: () {

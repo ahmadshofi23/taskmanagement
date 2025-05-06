@@ -14,7 +14,14 @@ void main() {
   // await Firebase.initializeApp();
   final TaskRepository repository = TaskRepositoryImpl(TaskLocalDataSource());
 
-  runApp(MyApp(repository: repository));
+  runApp(BlocProvider<ThemeBloc>(
+    create: (context) {
+      final themeBloc = ThemeBloc();
+      themeBloc.add(LoadThemeEvent());
+      return themeBloc;
+    },
+    child: MyApp(repository: repository),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -24,13 +31,25 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Task Manager',
-      home: BlocProvider(
-        create: (_) => TaskBloc(repository)..add(LoadTasks()),
-        child: TaskPage(),
-      ),
+    return BlocBuilder<ThemeBloc, ThemeState>(
+      builder: (context, state) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'Task Manager',
+          theme: state.themeData,
+          home: MultiBlocProvider(
+            providers: [
+              // BlocProvider(
+              //   create: (context) => ThemeBloc(),
+              // ),
+              BlocProvider(
+                create: (_) => TaskBloc(repository)..add(LoadTasks()),
+              ),
+            ],
+            child: TaskPage(),
+          ),
+        );
+      },
     );
   }
 }
